@@ -14,7 +14,7 @@
 
         <include
             android:id="@+id/userDetailsCard"
-            layout="@layout/item_simple_user"
+            layout="@layout/item_user"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

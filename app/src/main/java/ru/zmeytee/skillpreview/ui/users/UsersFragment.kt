@@ -18,6 +18,7 @@ import ru.zmeytee.skillpreview.R
 import ru.zmeytee.skillpreview.data.adapters.UserAdapter
 import ru.zmeytee.skillpreview.data.enums.ItemAction
 import ru.zmeytee.skillpreview.databinding.FragmentUsersBinding
+import ru.zmeytee.skillpreview.ui.interfaces.FabActionListener
 
 @AndroidEntryPoint
 class UsersFragment : Fragment(R.layout.fragment_users) {
@@ -25,12 +26,14 @@ class UsersFragment : Fragment(R.layout.fragment_users) {
     private val viewModel by viewModels<UsersViewModel>()
     private val binding by viewBinding(FragmentUsersBinding::bind)
     private var userAdapter: UserAdapter? = null
+    private val fabActionListener: FabActionListener?
+        get() = activity?.let { it as FabActionListener }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initUsersList()
-        setTitle()
+        setFragmentDefaults()
         bindViewModel()
     }
 
@@ -42,12 +45,13 @@ class UsersFragment : Fragment(R.layout.fragment_users) {
         }
     }
 
-    private fun setTitle() {
-//        binding.usersTitle.text = getString(R.string.users_title)
+    private fun setFragmentDefaults() {
+        binding.usersTitle.text = getString(R.string.users_title)
+        fabActionListener?.setFabAction(ItemAction.USER_ADD)
     }
 
     private fun initUsersList() {
-        userAdapter = UserAdapter(::handleItemAction)
+        userAdapter = UserAdapter(::navigateToUserDetails)
 
         val dividerItemDecoration = DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
         val drawable = ResourcesCompat.getDrawable(resources, R.drawable.divider, null)
@@ -63,15 +67,6 @@ class UsersFragment : Fragment(R.layout.fragment_users) {
         }
 
         viewModel.getListOfAllUsers()
-    }
-
-    private fun handleItemAction(userId: Long, action: ItemAction) {
-        when(action) {
-            ItemAction.INFO -> navigateToUserDetails(userId)
-            ItemAction.CALL -> { }
-            ItemAction.MAIL -> { }
-            ItemAction.DELETE -> { }
-        }
     }
 
     private fun navigateToUserDetails(userId: Long) {

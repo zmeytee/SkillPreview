@@ -1,4 +1,4 @@
-package ru.zmeytee.skillpreview.networking
+package ru.zmeytee.skillpreview.data.networking
 
 object Networking {
 

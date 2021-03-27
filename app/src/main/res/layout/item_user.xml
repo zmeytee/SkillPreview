@@ -46,41 +46,5 @@
             android:textStyle="italic"
             tools:text="Name" />
 
-        <ImageView
-            android:id="@+id/userItemDeleteUser"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_below="@id/userItemName"
-            android:layout_alignEnd="@id/userItemUserName"
-            android:background="?attr/selectableItemBackground"
-            android:padding="12dp"
-            android:src="@drawable/ic_delete"
-            app:tint="?attr/colorPrimaryVariant"
-            tools:ignore="ContentDescription" />
-
-        <ImageView
-            android:id="@+id/userItemMailToUser"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignTop="@id/userItemDeleteUser"
-            android:layout_toStartOf="@id/userItemDeleteUser"
-            android:background="?attr/selectableItemBackground"
-            android:padding="12dp"
-            android:src="@drawable/ic_mail"
-            app:tint="?attr/colorPrimaryVariant"
-            tools:ignore="ContentDescription" />
-
-        <ImageView
-            android:id="@+id/userItemCallUser"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignTop="@id/userItemDeleteUser"
-            android:layout_toStartOf="@id/userItemMailToUser"
-            android:background="?attr/selectableItemBackground"
-            android:padding="12dp"
-            android:src="@drawable/ic_call"
-            app:tint="?attr/colorPrimaryVariant"
-            tools:ignore="ContentDescription" />
-
     </RelativeLayout>
 </com.google.android.material.card.MaterialCardView>

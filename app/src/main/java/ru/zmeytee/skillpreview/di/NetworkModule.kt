@@ -10,9 +10,9 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
-import ru.zmeytee.skillpreview.networking.Api
-import ru.zmeytee.skillpreview.networking.Networking
-import ru.zmeytee.skillpreview.qualifiers.HttpLogging
+import ru.zmeytee.skillpreview.data.networking.Api
+import ru.zmeytee.skillpreview.data.networking.Networking
+import ru.zmeytee.skillpreview.data.qualifiers.HttpLogging
 import javax.inject.Singleton
 
 @Module
@@ -26,7 +26,6 @@ class NetworkModule {
     }
 
     @Provides
-    @Singleton
     fun provideOkHttpClient(@HttpLogging httpLoggingInterceptor: Interceptor): OkHttpClient {
         return OkHttpClient.Builder()
             .addNetworkInterceptor(httpLoggingInterceptor)
@@ -34,7 +33,6 @@ class NetworkModule {
     }
 
     @Provides
-    @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(Networking.BASE_URL)
@@ -44,6 +42,7 @@ class NetworkModule {
     }
 
     @Provides
+    @Singleton
     fun provideApi(retrofit: Retrofit): Api {
         return retrofit.create()
     }

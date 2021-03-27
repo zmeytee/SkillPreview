@@ -1,4 +1,4 @@
-package ru.zmeytee.skillpreview.qualifiers
+package ru.zmeytee.skillpreview.data.qualifiers
 
 import javax.inject.Qualifier
 

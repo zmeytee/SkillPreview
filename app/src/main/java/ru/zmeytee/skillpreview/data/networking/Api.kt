@@ -1,17 +1,16 @@
-package ru.zmeytee.skillpreview.networking
+package ru.zmeytee.skillpreview.data.networking
 
 import retrofit2.http.GET
 import retrofit2.http.Path
-import retrofit2.http.Query
 import ru.zmeytee.skillpreview.data.models.User
 
 interface Api {
 
     @GET("/users")
-    suspend fun getAllSimpleUsers(): List<User.SimpleUser>
+    suspend fun getAllUsers(): List<User.Remote>
 
     @GET("users/{id}")
-    suspend fun getAdvancedUser(
+    suspend fun getUserById(
         @Path("id") id: Long
-    ): User.AdvancedUser
+    ): User.Remote
 }

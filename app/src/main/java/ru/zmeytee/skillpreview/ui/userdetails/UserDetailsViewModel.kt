@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import ru.zmeytee.skillpreview.data.models.User
-import ru.zmeytee.skillpreview.repositories.UserRepositoryImpl
+import ru.zmeytee.skillpreview.data.repositories.UserRepositoryImpl
 import javax.inject.Inject
 
 @HiltViewModel

@@ -11,8 +11,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import ru.zmeytee.skillpreview.R
+import ru.zmeytee.skillpreview.data.enums.ItemAction
 import ru.zmeytee.skillpreview.data.models.User
 import ru.zmeytee.skillpreview.databinding.FragmentUserDetailsBinding
+import ru.zmeytee.skillpreview.ui.interfaces.FabActionListener
 
 @AndroidEntryPoint
 class UserDetailsFragment : Fragment(R.layout.fragment_user_details) {
@@ -20,6 +22,8 @@ class UserDetailsFragment : Fragment(R.layout.fragment_user_details) {
     private val viewModel by viewModels<UserDetailsViewModel>()
     private val binding by viewBinding(FragmentUserDetailsBinding::bind)
     private val args by navArgs<UserDetailsFragmentArgs>()
+    private val fabActionListener: FabActionListener?
+        get() = activity?.let { it as FabActionListener }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -27,6 +31,7 @@ class UserDetailsFragment : Fragment(R.layout.fragment_user_details) {
         bindViewModel()
         setListeners()
         getUserDetails(args.userId)
+        fabActionListener?.setFabAction(ItemAction.BACK)
     }
 
     private fun bindViewModel() {
@@ -39,7 +44,7 @@ class UserDetailsFragment : Fragment(R.layout.fragment_user_details) {
 
     private fun setListeners() {
         with(binding) {
-            
+
         }
     }
 
@@ -51,27 +56,22 @@ class UserDetailsFragment : Fragment(R.layout.fragment_user_details) {
         if (user == null) return
 
         when (user) {
-            is User.AdvancedUser -> {
-                showAdvancedUserDetails(user)
-            }
-            else -> {
-            }
+            is User.Remote -> showUserDetails(user)
+            else -> { }
         }
     }
 
-    private fun showAdvancedUserDetails(advancedUser: User.AdvancedUser) {
+    private fun showUserDetails(remoteUser: User.Remote) {
         with(binding) {
-            val address = advancedUser.address.let { it.city + it.street }
-            val company = advancedUser.company.let { "${it.name}\n<${it.catchPhrase}>" }
+            userDetailsCard.userItemUserName.text = remoteUser.userName
+            userDetailsCard.userItemName.text = remoteUser.name
 
-            userDetailsCard.userItemUserName.text = advancedUser.username
-            userDetailsCard.userItemName.text = advancedUser.name
-
-            userDetailsEmail.text = advancedUser.email
-            userDetailsWebsite.text = advancedUser.website
-            userDetailsPhone.text = advancedUser.phone
-            userDetailsAddress.text = address
-            userDetailsCompany.text = company
+            userDetailsEmail.text = remoteUser.email
+            userDetailsWebsite.text = remoteUser.website
+            userDetailsPhone.text = remoteUser.phone
+            userDetailsAddress.text = remoteUser.address.street
+            userDetailsAddressDescription.text = remoteUser.address.city
+            userDetailsCompany.text = remoteUser.company.name
         }
     }
 }

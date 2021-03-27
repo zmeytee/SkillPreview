@@ -2,23 +2,21 @@ package ru.zmeytee.skillpreview.data.adapters
 
 import androidx.recyclerview.widget.DiffUtil
 import com.hannesdorfmann.adapterdelegates4.AsyncListDifferDelegationAdapter
-import ru.zmeytee.skillpreview.data.enums.ItemAction
 import ru.zmeytee.skillpreview.data.models.User
 
 class UserAdapter(
-    onClick: (id: Long, action: ItemAction) -> Unit
+    onClick: (id: Long) -> Unit
 ): AsyncListDifferDelegationAdapter<User>(UserDiffUtilCallback()) {
 
     init {
         delegatesManager
-            .addDelegate(SimpleUserDelegate(onClick))
+            .addDelegate(UserDelegate(onClick))
     }
 
     class UserDiffUtilCallback: DiffUtil.ItemCallback<User>() {
         override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
             return when {
-                oldItem is User.SimpleUser && newItem is User.SimpleUser -> oldItem.id == newItem.id
-                oldItem is User.AdvancedUser && newItem is User.AdvancedUser -> oldItem.id == newItem.id
+                oldItem is User.Remote && newItem is User.Remote -> oldItem.id == newItem.id
                 else -> false
             }
         }
