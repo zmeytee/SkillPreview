@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/usersFragment"
-        android:name="ru.zmeytee.skillpreview.ui.users.UsersFragment"
+        android:name="ru.zmeytee.skillpresentation.ui.users.UsersFragment"
         tools:layout="@layout/fragment_users"
         android:label="UsersFragment" >
         <action
@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/userDetailsFragment"
-        android:name="ru.zmeytee.skillpreview.ui.userdetails.UserDetailsFragment"
+        android:name="ru.zmeytee.skillpresentation.ui.userdetails.UserDetailsFragment"
         tools:layout="@layout/fragment_user_details"
         android:label="UserDetailsFragment" >
         <argument

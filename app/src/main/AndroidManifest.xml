@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ru.zmeytee.skillpreview">
+    package="ru.zmeytee.skillpresentation">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".app.App"
+        android:name="ru.zmeytee.skillpresentation.app.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.SkillPreview">
+        android:theme="@style/Theme.SkillPresentation">
         <activity
-            android:name=".ui.MainActivity"
+            android:name="ru.zmeytee.skillpresentation.ui.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
