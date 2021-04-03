@@ -34,8 +34,14 @@ class UsersFragment : Fragment(R.layout.fragment_users) {
         super.onViewCreated(view, savedInstanceState)
 
         fabActionListener?.setFabAction(ItemAction.USER_ADD)
+        viewModel.getListOfAllUsers()
         initUsersList()
         bindViewModel()
+    }
+
+    override fun onDestroyView() {
+        viewModel.cancelJob()
+        super.onDestroyView()
     }
 
     private fun bindViewModel() {
@@ -65,8 +71,6 @@ class UsersFragment : Fragment(R.layout.fragment_users) {
             }
             setHasFixedSize(true)
         }
-
-        viewModel.getListOfAllUsers()
     }
 
     private fun showLoading(show: Boolean) {

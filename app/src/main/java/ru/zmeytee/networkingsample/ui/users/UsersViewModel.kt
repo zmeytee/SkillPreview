@@ -42,7 +42,7 @@ class UsersViewModel @Inject constructor(
         }
     }
 
-    private fun cancelJob() {
+    fun cancelJob() {
         currentJob?.cancelChildren()
     }
 

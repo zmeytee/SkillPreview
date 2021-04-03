@@ -1,8 +1,10 @@
 package ru.zmeytee.networkingsample.ui.useradd
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -23,6 +25,8 @@ import ru.zmeytee.networkingsample.data.models.Geo
 import ru.zmeytee.networkingsample.data.models.User
 import ru.zmeytee.networkingsample.databinding.FragmentUserAddBinding
 import ru.zmeytee.networkingsample.ui.FabActionListener
+import ru.zmeytee.networkingsample.utils.toast
+import timber.log.Timber
 
 @AndroidEntryPoint
 class UserAddFragment : Fragment(R.layout.fragment_user_add) {
@@ -32,17 +36,24 @@ class UserAddFragment : Fragment(R.layout.fragment_user_add) {
     private val fabActionListener: FabActionListener?
         get() = activity?.let { it as FabActionListener }
 
+    private val getContent =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { imageUri: Uri? ->
+            Timber.d("RESULT = $imageUri")
+            setAvatarImage(imageUri)
+        }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        fabActionListener?.setFabAction(ItemAction.BACK)
         bindViewModel()
         setListeners()
-        fabActionListener?.setFabAction(ItemAction.BACK)
+        setAvatarImage()
+    }
 
-        binding.avatarImage.load("https://www.meme-arsenal.com/memes/ad998282fd526298aeb217a8e2ee02b0.jpg") {
-            placeholder(R.drawable.ic_person)
-            transformations(CircleCropTransformation())
-        }
+    override fun onDestroyView() {
+        viewModel.cancelJob()
+        super.onDestroyView()
     }
 
     private fun bindViewModel() {
@@ -52,23 +63,51 @@ class UserAddFragment : Fragment(R.layout.fragment_user_add) {
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
             addingSuccess
-                .onEach { if (it) findNavController().navigateUp() }
+                .onEach { success -> success?.let { handleUserAddingResult(it) } }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
         }
     }
 
     private fun setListeners() {
         with(binding) {
-            contactsTitleTextView.setOnClickListener {
-                showHiddenForms(binding.contactsGroup, binding.contactsSpoiler)
+            avatarEditView.avatarEditFab.setOnClickListener {
+                getContent.launch("image/*")
             }
-            addressTitleTextView.setOnClickListener {
-                showHiddenForms(binding.addressGroup, binding.addressSpoiler)
+
+            contactsCard.contactsTitleTextView.setOnClickListener {
+                showHiddenForms(
+                    binding.contactsCard.contactsGroup,
+                    binding.contactsCard.contactsSpoiler
+                )
             }
-            companyTitleTextView.setOnClickListener {
-                showHiddenForms(binding.companyGroup, binding.companySpoiler)
+            addressCard.addressTitleTextView.setOnClickListener {
+                showHiddenForms(
+                    binding.addressCard.addressGroup,
+                    binding.addressCard.addressSpoiler
+                )
+            }
+            companyCard.companyTitleTextView.setOnClickListener {
+                showHiddenForms(
+                    binding.companyCard.companyGroup,
+                    binding.companyCard.companySpoiler
+                )
             }
             saveUserFab.setOnClickListener { saveUser(getUserFromForms()) }
+        }
+    }
+
+    private fun setAvatarImage(imageUri: Uri? = null) {
+        with(binding.avatarEditView.avatarImage) {
+            imageUri
+                ?.let {
+                    load(imageUri) {
+                        transformations(CircleCropTransformation())
+                        placeholder(R.drawable.ic_person)
+                    }
+                }
+                ?: load(R.drawable.ic_person) {
+                    transformations(CircleCropTransformation())
+                }
         }
     }
 
@@ -91,11 +130,11 @@ class UserAddFragment : Fragment(R.layout.fragment_user_add) {
     }
 
     private fun getUserFromForms(): User {
-        val name = binding.nameEditText.text.toString()
-        val userName = binding.userNameEditText.text.toString()
-        val email = binding.emailEditText.text.toString()
-        val phone = binding.phoneEditText.text.toString()
-        val website = binding.websiteEditText.text.toString()
+        val name = binding.userInfoCard.nameEditText.text.toString()
+        val userName = binding.userInfoCard.userNameEditText.text.toString()
+        val email = binding.contactsCard.emailEditText.text.toString()
+        val phone = binding.contactsCard.phoneEditText.text.toString()
+        val website = binding.contactsCard.websiteEditText.text.toString()
 
         return User(
             id = 0,
@@ -110,10 +149,10 @@ class UserAddFragment : Fragment(R.layout.fragment_user_add) {
     }
 
     private fun getAddressFromForms(): Address {
-        val addressStreet = binding.streetEditText.text?.toString()
-        val addressSuite = binding.suiteEditText.text.toString()
-        val addressCity = binding.cityEditText.text.toString()
-        val addressZipcode = binding.zipcodeEditText.text.toString()
+        val addressStreet = binding.addressCard.streetEditText.text?.toString()
+        val addressSuite = binding.addressCard.suiteEditText.text.toString()
+        val addressCity = binding.addressCard.cityEditText.text.toString()
+        val addressZipcode = binding.addressCard.zipcodeEditText.text.toString()
 
         return Address(
             street = addressStreet,
@@ -135,9 +174,9 @@ class UserAddFragment : Fragment(R.layout.fragment_user_add) {
     }
 
     private fun getCompanyFromForms(): Company {
-        val companyName = binding.companyNameEditText.text.toString()
-        val companyCatchPhrase = binding.companyCatchPhraseEditText.text.toString()
-        val companyBs = binding.companyBsEditText.text.toString()
+        val companyName = binding.companyCard.companyNameEditText.text.toString()
+        val companyCatchPhrase = binding.companyCard.companyCatchPhraseEditText.text.toString()
+        val companyBs = binding.companyCard.companyBsEditText.text.toString()
 
         return Company(
             name = companyName,
@@ -146,7 +185,44 @@ class UserAddFragment : Fragment(R.layout.fragment_user_add) {
         )
     }
 
+    private fun handleUserAddingResult(success: Boolean) {
+        if (success) {
+            toast("Пользователь добавлен")
+            findNavController().navigateUp()
+        } else {
+            toast("Ошибка добавления")
+        }
+        viewModel.resetStateFlow()
+    }
+
     private fun showLoading(show: Boolean) {
-        binding.loadingProgress.root.isVisible = show
+        with(binding) {
+            saveUserFab.isEnabled = !show
+
+            //Avatar
+            avatarEditView.avatarEditFab.isEnabled = !show
+            //User info
+            userInfoCard.nameEditText.isEnabled = !show
+            userInfoCard.userNameEditText.isEnabled = !show
+            //Contacts
+            contactsCard.contactsTitleTextView.isEnabled = !show
+            contactsCard.emailEditText.isEnabled = !show
+            contactsCard.phoneEditText.isEnabled = !show
+            contactsCard.websiteEditText.isEnabled = !show
+            //Address
+            addressCard.addressTitleTextView.isEnabled = !show
+            addressCard.streetEditText.isEnabled = !show
+            addressCard.suiteEditText.isEnabled = !show
+            addressCard.cityEditText.isEnabled = !show
+            addressCard.zipcodeEditText.isEnabled = !show
+            addressCard.geoEditText.isEnabled = !show
+            //Company
+            companyCard.companyTitleTextView.isEnabled = !show
+            companyCard.companyNameEditText.isEnabled = !show
+            companyCard.companyCatchPhraseEditText.isEnabled = !show
+            companyCard.companyBsEditText.isEnabled = !show
+
+            loadingProgress.root.isVisible = show
+        }
     }
 }

@@ -1,4 +1,21 @@
 <resources>
     <string name="app_name">NetworkingSample</string>
     <string name="users_title">UsersTitle</string>
+    <string name="add_user">Add user</string>
+    <string name="bs">bs</string>
+    <string name="catch_phrase">Catch phrase</string>
+    <string name="name">Name</string>
+    <string name="company">Company</string>
+    <string name="geo">Geo</string>
+    <string name="zip_code">zip code</string>
+    <string name="city">City</string>
+    <string name="suite">Suite</string>
+    <string name="street">Street</string>
+    <string name="address">Address</string>
+    <string name="website">Website</string>
+    <string name="phone">Phone</string>
+    <string name="email">Email</string>
+    <string name="contacts">Contacts</string>
+    <string name="username">Username</string>
+    <string name="user_info">User info</string>
 </resources>

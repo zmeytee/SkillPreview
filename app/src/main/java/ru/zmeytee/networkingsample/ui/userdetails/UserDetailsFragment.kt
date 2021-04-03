@@ -19,6 +19,7 @@ import ru.zmeytee.networkingsample.data.enums.ItemAction
 import ru.zmeytee.networkingsample.data.models.User
 import ru.zmeytee.networkingsample.databinding.FragmentUserDetailsBinding
 import ru.zmeytee.networkingsample.ui.FabActionListener
+import ru.zmeytee.networkingsample.utils.toast
 
 @AndroidEntryPoint
 class UserDetailsFragment : Fragment(R.layout.fragment_user_details) {
@@ -38,6 +39,11 @@ class UserDetailsFragment : Fragment(R.layout.fragment_user_details) {
         getUserDetails(args.userId)
     }
 
+    override fun onDestroyView() {
+        viewModel.cancelJob()
+        super.onDestroyView()
+    }
+
     private fun bindViewModel() {
         with(viewModel) {
             isLoading
@@ -45,7 +51,7 @@ class UserDetailsFragment : Fragment(R.layout.fragment_user_details) {
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
             deletingSuccess
-                .onEach { if (it) findNavController().navigateUp() }
+                .onEach { success -> success?.let { handleUserDeletingResult(it) } }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
             currentUser
@@ -88,7 +94,18 @@ class UserDetailsFragment : Fragment(R.layout.fragment_user_details) {
         }
     }
 
+    private fun handleUserDeletingResult(success: Boolean) {
+        if (success) {
+            toast("Пользователь удален")
+            findNavController().navigateUp()
+        } else {
+            toast("Ошибка удаления")
+        }
+        viewModel.resetStateFlow()
+    }
+
     private fun showLoading(show: Boolean) {
+        binding.deleteUserFab.isEnabled = !show
         binding.userDetailsLoading.root.isVisible = show
     }
 }

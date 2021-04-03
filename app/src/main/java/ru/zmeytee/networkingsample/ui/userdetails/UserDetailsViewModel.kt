@@ -20,7 +20,7 @@ class UserDetailsViewModel @Inject constructor(
     private var currentJob: Job? = null
 
     private val _isLoading = MutableStateFlow(false)
-    private val _deletingSuccess = MutableStateFlow(false)
+    private val _deletingSuccess = MutableStateFlow<Boolean?>(null)
     private val _currentUser = MutableStateFlow<User?>(null)
 
     val isLoading = _isLoading.asStateFlow()
@@ -44,7 +44,8 @@ class UserDetailsViewModel @Inject constructor(
     }
 
     fun deleteUser(id: Long) {
-        viewModelScope.launch {
+        cancelJob()
+        currentJob = viewModelScope.launch {
             kotlin.runCatching {
                 _isLoading.value = true
                 repository.deleteUser(id)
@@ -54,13 +55,18 @@ class UserDetailsViewModel @Inject constructor(
                     _deletingSuccess.value = true
                 }
                 .onFailure {
+                    _deletingSuccess.value = false
                     _isLoading.value = false
                 }
         }
     }
 
-    private fun cancelJob() {
+    fun cancelJob() {
         currentJob?.cancelChildren()
+    }
+
+    fun resetStateFlow() {
+        _deletingSuccess.value = null
     }
 
     override fun onCleared() {

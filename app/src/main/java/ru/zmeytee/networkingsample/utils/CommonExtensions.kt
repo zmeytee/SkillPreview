@@ -1,5 +1,6 @@
 package ru.zmeytee.networkingsample.utils
 
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,9 +14,13 @@ fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false):
 }
 
 fun Fragment.toast(message: String) {
-    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT)
+        .apply { setGravity(Gravity.BOTTOM, 0, 200) }
+        .show()
 }
 
 fun Fragment.toast(@StringRes message: Int) {
-    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT)
+        .apply { setGravity(Gravity.BOTTOM, 0, 200) }
+        .show()
 }
