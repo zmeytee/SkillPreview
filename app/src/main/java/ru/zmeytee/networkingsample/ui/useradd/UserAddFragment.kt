@@ -15,8 +15,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import coil.load
 import coil.transform.CircleCropTransformation
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collect
 import ru.zmeytee.networkingsample.R
 import ru.zmeytee.networkingsample.data.enums.ItemAction
 import ru.zmeytee.networkingsample.data.models.Address
@@ -58,13 +57,13 @@ class UserAddFragment : Fragment(R.layout.fragment_user_add) {
 
     private fun bindViewModel() {
         with(viewModel) {
-            isLoading
-                .onEach { showLoading(it) }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            lifecycleScope.launchWhenStarted {
+                isLoading.collect { showLoading(it) }
+            }
 
-            addingSuccess
-                .onEach { success -> success?.let { handleUserAddingResult(it) } }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            lifecycleScope.launchWhenStarted {
+                addingSuccess.collect { success -> success?.let { handleUserAddingResult(it) } }
+            }
         }
     }
 

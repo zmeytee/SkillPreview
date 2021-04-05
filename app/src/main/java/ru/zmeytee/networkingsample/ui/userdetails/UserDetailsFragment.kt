@@ -12,8 +12,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import coil.load
 import coil.transform.CircleCropTransformation
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collect
 import ru.zmeytee.networkingsample.R
 import ru.zmeytee.networkingsample.data.enums.ItemAction
 import ru.zmeytee.networkingsample.data.models.User
@@ -46,17 +45,17 @@ class UserDetailsFragment : Fragment(R.layout.fragment_user_details) {
 
     private fun bindViewModel() {
         with(viewModel) {
-            isLoading
-                .onEach { showLoading(it) }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            lifecycleScope.launchWhenStarted {
+                isLoading.collect { showLoading(it) }
+            }
 
-            deletingSuccess
-                .onEach { success -> success?.let { handleUserDeletingResult(it) } }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            lifecycleScope.launchWhenStarted {
+                deletingSuccess.collect { success -> success?.let { handleUserDeletingResult(it) } }
+            }
 
-            currentUser
-                .onEach { handleUserDetails(it) }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            lifecycleScope.launchWhenStarted {
+                currentUser.collect { handleUserDetails(it) }
+            }
         }
     }
 

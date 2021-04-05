@@ -90,7 +90,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2"
 
     // Coil
-    implementation "io.coil-kt:coil:1.1.0"
+    implementation "io.coil-kt:coil:1.1.1"
 
     //View Binding Delegate
     implementation 'com.kirich1409.viewbindingpropertydelegate:vbpd-noreflection:1.4.1'

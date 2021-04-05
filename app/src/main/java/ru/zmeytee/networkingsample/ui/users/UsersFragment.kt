@@ -13,8 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collect
 import ru.zmeytee.networkingsample.R
 import ru.zmeytee.networkingsample.data.adapters.UserAdapter
 import ru.zmeytee.networkingsample.data.enums.ItemAction
@@ -46,13 +45,13 @@ class UsersFragment : Fragment(R.layout.fragment_users) {
 
     private fun bindViewModel() {
         with(viewModel) {
-            isLoading
-                .onEach { showLoading(it) }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            lifecycleScope.launchWhenStarted {
+                isLoading.collect { showLoading(it) }
+            }
 
-            users
-                .onEach { userAdapter?.items = it }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            lifecycleScope.launchWhenStarted {
+                users.collect { userAdapter?.items = it }
+            }
         }
     }
 
