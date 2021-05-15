@@ -1,4 +1,4 @@
-package ru.zmeytee.networkingsample.data.qualifiers
+package ru.zmeytee.networkingsample.di.qualifiers
 
 import javax.inject.Qualifier
 

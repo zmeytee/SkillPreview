@@ -34,12 +34,8 @@ class UserDetailsViewModel @Inject constructor(
                 _isLoading.value = true
                 _currentUser.value = repository.getUser(id)
             }
-                .onSuccess {
-                    _isLoading.value = false
-                }
-                .onFailure {
-                    _isLoading.value = false
-                }
+                .onSuccess { _isLoading.value = false }
+                .onFailure { _isLoading.value = false }
         }
     }
 

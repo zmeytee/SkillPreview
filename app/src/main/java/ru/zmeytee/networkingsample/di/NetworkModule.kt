@@ -10,9 +10,9 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
-import ru.zmeytee.networkingsample.data.networking.Api
-import ru.zmeytee.networkingsample.data.networking.Networking
-import ru.zmeytee.networkingsample.data.qualifiers.HttpLogging
+import ru.zmeytee.networkingsample.di.qualifiers.HttpLogging
+import ru.zmeytee.networkingsample.networking.Api
+import ru.zmeytee.networkingsample.networking.Networking
 import javax.inject.Singleton
 
 @Module

@@ -33,12 +33,8 @@ class UsersViewModel @Inject constructor(
                 val list = repository.getAllUsers()
                 _users.value = list
             }
-                .onSuccess {
-                    _isLoading.value = false
-                }
-                .onFailure {
-                    _isLoading.value = false
-                }
+                .onSuccess { _isLoading.value = false }
+                .onFailure { _isLoading.value = false }
         }
     }
 

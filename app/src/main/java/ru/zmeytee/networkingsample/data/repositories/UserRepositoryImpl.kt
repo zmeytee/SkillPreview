@@ -3,8 +3,8 @@ package ru.zmeytee.networkingsample.data.repositories
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import ru.zmeytee.networkingsample.data.models.User
-import ru.zmeytee.networkingsample.data.networking.Api
 import ru.zmeytee.networkingsample.data.repositories.interfaces.UserRepository
+import ru.zmeytee.networkingsample.networking.Api
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(

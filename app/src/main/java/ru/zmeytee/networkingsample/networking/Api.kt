@@ -1,4 +1,4 @@
-package ru.zmeytee.networkingsample.data.networking
+package ru.zmeytee.networkingsample.networking
 
 import retrofit2.http.*
 import ru.zmeytee.networkingsample.data.models.User

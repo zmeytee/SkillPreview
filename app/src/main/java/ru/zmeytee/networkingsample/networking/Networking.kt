@@ -1,4 +1,4 @@
-package ru.zmeytee.networkingsample.data.networking
+package ru.zmeytee.networkingsample.networking
 
 object Networking {
 
